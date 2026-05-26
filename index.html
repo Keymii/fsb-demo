@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TTS Demo Samples</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-2: #1f2937;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1200px, 92%);
+      margin: 0 auto;
+      padding: 48px 0 64px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .model-section {
+      margin-bottom: 56px;
+    }
+
+    .model-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .model-title h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    .audio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .audio-card {
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      backdrop-filter: blur(6px);
+    }
+
+    .audio-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .audio-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .audio-card p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 18px;
+      font-size: 0.95rem;
+    }
+
+    audio {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .global-selector {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 300px;
+    }
+
+    .global-selector label {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    .global-selector select {
+      background: rgba(0, 0, 0, 1);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .global-selector select:focus {
+      border-color: var(--accent);
+    }
+
+    .metrics {
+      margin-top: 14px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+    }
+
+    .metrics div {
+      background: rgba(255,255,255,0.05);
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer {
+      margin-top: 60px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #e2e8f0;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .model-title {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+      .references-section {
+      margin-top: 60px;
+    }
+
+    .references-section h2 {
+      margin-bottom: 24px;
+      font-size: 2rem;
+    }
+
+    .reference-card {
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .reference-card h3 {
+      margin-top: 0;
+    }
+
+    .reference-card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .best-card {
+      border: 2px solid #22c55e;
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
+      position: relative;
+    }
+
+    .best-card::before {
+      content: "Best";
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Harmonizing the Flow: Wavelet-Driven Frequency-Selective Boosting for CFM-Based TTS</h1>
+      <p>
+        Comparative demo page for our Boosting strategy across multiple models and evaluation sets.
+      </p>
+    </section>
+
+    <!-- TEMPLATE NOTE -->
+    <!--
+      Each set below supports multiple audio samples.
+      Duplicate or remove sample blocks as needed.
+    -->
+
+    <!-- MODEL 1 -->
+    <section class="model-section">
+      <div class="model-title">
+        <h2>Matcha-TTS</h2>
+        <!-- <span class="badge">Baseline</span> -->
+      </div>
+
+      <div class="global-selector">
+        <label for="modelASelector">Select Sample ID:</label>
+        <select id="modelASelector" onchange="updateModelSamples('modelA', this.value)">
+          <option value="1">Sample 1</option>
+          <option value="2">Sample 2</option>
+          <option value="3">Sample 3</option>
+          <option value="4">Sample 4</option>
+          <option value="5">Sample 5</option>
+          <option value="6">Sample 6</option>
+          <option value="7">Sample 7</option>
+          <option value="8">Sample 8</option>
+          <option value="9">Sample 9</option>
+          <option value="10">Sample 10</option>
+        </select>
+      </div>
+
+      
+      <div class="audio-grid">
+        <div class="audio-card best-card">
+        <!-- <div class="audio-card"> -->
+          <h3>Boosted 26</h3>
+          <p>Generated with 26 steps of our reweighting strategy for NFE = 26.</p>
+
+          <audio id="modelA_set1" controls>
+            <source src="audio/model_a/set1/sample1.wav" type="audio/wav" />
+          </audio>
+
+          <div class="metrics">
+            <div><strong>UTMOS:</strong> <span id="modelA_set1_mos">4.32</span></div>
+            <!-- <div><strong>SSS:</strong> <span id="modelA_set1_sss">0.91</span></div> -->
+          </div>
+        <!-- </div> -->
+        </div>
+
+        <div class="audio-card">
+          <h3>Baseline 32</h3>
+          <p>Generated with 32 steps of the baseline model for NFE = 32.</p>
+
+          <audio id="modelA_set2" controls>
+            <source src="audio/model_a/set2/sample1.wav" type="audio/wav" />
+          </audio>
+
+          <div class="metrics">
+            <div><strong>UTMOS:</strong> <span id="modelA_set2_mos">4.21</span></div>
+            <!-- <div><strong>SSS:</strong> <span id="modelA_set2_sss">0.88</span></div> -->
+          </div>
+        </div>
+
+        <div class="audio-card">
+          <h3>Baseline 26*</h3>
+          <p>Generated with 26 steps of the baseline model for NFE = 32.</p>
+
+          <audio id="modelA_set3" controls>
+            <source src="audio/model_a/set3/sample1.wav" type="audio/wav" />
+          </audio>
+
+          <div class="metrics">
+            <div><strong>UTMOS:</strong> <span id="modelA_set3_mos">4.18</span></div>
+            <!-- <div><strong>SSS:</strong> <span id="modelA_set3_sss">0.86</span></div> -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODEL 2 -->
+    <section class="model-section">
+      <div class="model-title">
+        <h2>Libri-TTS</h2>
+        <!-- <span class="badge">Proposed Method</span> -->
+      </div>
+
+      <div class="global-selector">
+        <label for="modelBSelector">Select Sample ID:</label>
+        <select id="modelBSelector" onchange="updateModelSamples('modelB', this.value)">
+          <option value="1">Sample 1</option>
+          <option value="2">Sample 2</option>
+          <option value="3">Sample 3</option>
+          <option value="4">Sample 4</option>
+          <option value="5">Sample 5</option>
+          <!-- <option value="6">Sample 6</option>
+          <option value="7">Sample 7</option>
+          <option value="8">Sample 8</option>
+          <option value="9">Sample 9</option>
+          <option value="10">Sample 10</option> -->
+        </select>
+      </div>
+
+      <div class="audio-grid">
+        <div class="audio-card">
+          <h3>Boosted 26</h3>
+          <p>Generated with 26 steps of our reweighting strategy for NFE = 26.</p>
+
+          <audio id="modelB_set1" controls>
+            <source src="audio/model_b/set1/sample1.wav" type="audio/wav" />
+          </audio>
+
+          <div class="metrics">
+            <div><strong>UTMOS:</strong> <span id="modelB_set1_mos">3.9</span></div>
+            <!-- <div><strong>SSS:</strong> <span id="modelB_set1_sss">0.95</span></div> -->
+          </div>
+        </div>
+
+        <div class="audio-card">
+          <h3>Baseline 32</h3>
+          <p>Generated with 32 steps of the baseline model for NFE = 32.</p>
+
+          <audio id="modelB_set2" controls>
+            <source src="audio/model_b/set2/sample1.wav" type="audio/wav" />
+          </audio>
+
+          <div class="metrics">
+            <div><strong>UTMOS:</strong> <span id="modelB_set2_mos">3.8</span></div>
+            <!-- <div><strong>SSS:</strong> <span id="modelB_set2_sss">0.93</span></div> -->
+          </div>
+        </div>
+
+        <div class="audio-card">
+          <h3>Baseline 26*</h3>
+          <p>Generated with 26 steps of the baseline model for NFE = 32.</p>
+
+          <audio id="modelB_set3" controls>
+            <source src="audio/model_b/set3/sample1.wav" type="audio/wav" />
+          </audio>
+
+          <div class="metrics">
+            <div><strong>UTMOS:</strong> <span id="modelB_set3_mos">2.6</span></div>
+            <!-- <div><strong>SSS:</strong> <span id="modelB_set3_sss">0.92</span></div> -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <section class="references-section">
+      <h2>Dataset and Evaluation References</h2>
+
+      <div class="reference-card">
+        <h3>Dataset</h3>
+
+        <p>
+          <b>For Matcha-TTS: Librispeech test samples</b> 
+          <br>[1] V. Panayotov, G. Chen, D. Povey and S. Khudanpur, "Librispeech: An ASR corpus based on public domain audio books," 2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), 2015.
+        </p>
+        <p>
+          <b>For Libri-TTS: LibriTTS-other</b>
+          <br>
+          [2] Heiga Zen, Viet Dang, Rob Clark, Yu Zhang, Ron J.
+          Weiss, Ye Jia, Zhifeng Chen, and Yonghui Wu. 2019.
+          "Libritts: A corpus derived from librispeech for text to-speech", In Proc. Interspeech.
+        </p>
+
+      </div>
+
+      <div class="reference-card">
+        <h3>MOS Evaluation</h3>
+        The MOS for English audios was computed using UTMOS
+        <p>
+          [3] Saeki et al., “UTMOS: UTokyo-SaruLab System for VoiceMOS Challenge 2022,” Interspeech 2022.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- <div class="footer">
+      <p>
+        Host this page anonymously using <code>GitHub Pages</code> by uploading this file as <code>index.html</code>.
+      </p>
+    </div> -->
+  </div>
+  <script>
+    // const metricsData = {
+    //   modelA: {
+    //     1: {
+    //       set1: { mos: '4.32', sss: '0.91' },
+    //       set2: { mos: '4.21', sss: '0.88' },
+    //       set3: { mos: '4.18', sss: '0.86' }
+    //     }
+    //   },
+    //   modelB: {
+    //     1: {
+    //       set1: { mos: '4.55', sss: '0.95' },
+    //       set2: { mos: '4.47', sss: '0.93' },
+    //       set3: { mos: '4.41', sss: '0.92' }
+    //     }
+    //   }
+    // };
+    let metricsData = {};
+
+    async function loadMetrics() {
+      try {
+        const response = await fetch('metrics.json');
+        metricsData = await response.json();
+        console.log('Metrics loaded successfully');
+      } catch (error) {
+        console.error('Failed to load metrics.json', error);
+      }
+      updateModelSamples('modelA', 4);
+      updateModelSamples('modelB', 1);
+    }
+
+    loadMetrics();
+
+    function updateModelSamples(model, sampleId) {
+      const modelPath = model === 'modelA' ? 'model_a' : 'model_b';
+
+      for (let setIdx = 1; setIdx <= 3; setIdx++) {
+        const player = document.getElementById(`${model}_set${setIdx}`);
+        const source = player.querySelector('source');
+
+        source.src = `audio/${modelPath}/set${setIdx}/sample${sampleId}.wav`;
+        player.load();
+
+        const metric = metricsData?.[model]?.[sampleId]?.[`set${setIdx}`];
+
+        if (metric) {
+            document.getElementById(`${model}_set${setIdx}_mos`).innerText = metric.mos;
+          // document.getElementById(`${model}_set${setIdx}_sss`).innerText = metric.sss;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
